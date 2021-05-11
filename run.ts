@@ -45,6 +45,8 @@ type Args = {
 		waitSecondsAfterOff: number
 		waitSecondsAfterOn: number
 	}
+	flashLogLocation: string
+	deviceLogLocation: string
 }
 
 export const run = ({
@@ -70,6 +72,8 @@ export const run = ({
 		testEnv,
 		certDir,
 		powerCycle,
+		flashLogLocation,
+		deviceLogLocation,
 	}: Args): Result => {
 		debug('appVersion', appVersion)
 		debug('network', network)
@@ -83,6 +87,8 @@ export const run = ({
 		debug('testEnv', testEnv)
 		debug('certDir', certDir)
 		debug('powerCycle', powerCycle)
+		debug('flashLogLocation', flashLogLocation)
+		debug('deviceLogLocation', deviceLogLocation)
 		const atHost =
 			target === 'thingy91_nrf9160ns'
 				? atHostHexfile.thingy91
@@ -107,7 +113,7 @@ export const run = ({
 			)
 		}
 
-		return new Promise<{
+		const res = await new Promise<{
 			connected: boolean
 			timeout: boolean
 			abort: boolean
@@ -167,6 +173,15 @@ export const run = ({
 						...credentials,
 						...connection,
 						secTag,
+						caCert: await fs.readFile(
+							path.resolve(
+								__dirname,
+								'..',
+								'data',
+								'BaltimoreCyberTrustRoot.pem',
+							),
+							'utf-8',
+						),
 					})
 					flashLog = await flash({
 						hexfile: hexFile,
@@ -218,5 +233,10 @@ export const run = ({
 				})
 				.catch(reject)
 		})
+		await Promise.all([
+			fs.writeFile(flashLogLocation, res.flashLog.join('\n'), 'utf-8'),
+			fs.writeFile(deviceLogLocation, res.deviceLog.join('\n'), 'utf-8'),
+		])
+		return res
 	}
 }
