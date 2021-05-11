@@ -1,0 +1,112 @@
+{
+  "name": "@nordicsemiconductor/firmware-ci-runner-azure",
+  "version": "0.0.0-development",
+  "description": "Runs firmware on a real device connected to Azure IoT hub.",
+  "main": "./dist/export.js",
+  "bin": "./cli/index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node --unhandled-rejections=strict dist/runner/runner.js",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NordicSemiconductor/cloud-azure-firmware-ci-runner-js.git"
+  },
+  "keywords": [
+    "Cloud",
+    "IoT",
+    "AssetTracker",
+    "Nordic Semiconductor"
+  ],
+  "author": "Nordic Semiconductor ASA | nordicsemi.no",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/NordicSemiconductor/cloud-azure-firmware-ci-runner-js/issues"
+  },
+  "homepage": "https://github.com/NordicSemiconductor/cloud-azure-firmware-ci-runner-js#readme",
+  "dependencies": {
+    "@nordicsemiconductor/firmware-ci-device-helpers": "7.3.0",
+    "@serialport/parser-readline": "9.0.7",
+    "commander": "7.2.0",
+    "form-data": "4.0.0",
+    "node-fetch": "2.6.1",
+    "serialport": "9.0.7",
+    "shell-quote": "*",
+    "uuid": "8.3.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "12.1.1",
+    "@commitlint/config-angular": "12.1.1",
+    "@nordicsemiconductor/asset-tracker-cloud-code-style": "9.0.2",
+    "@nordicsemiconductor/eslint-config-asset-tracker-cloud-typescript": "7.0.20",
+    "@types/jest": "26.0.23",
+    "@types/node": "15.0.2",
+    "@types/node-fetch": "2.5.10",
+    "@types/serialport": "8.0.1",
+    "@types/shell-quote": "*",
+    "@types/uuid": "8.3.0",
+    "chalk": "4.1.1",
+    "eslint": "7.26.0",
+    "husky": "6.0.0",
+    "jest": "26.6.3",
+    "lint-staged": "11.0.0",
+    "pinst": "2.1.6",
+    "prettier": "2.3.0",
+    "ts-jest": "26.5.6",
+    "typescript": "4.2.4"
+  },
+  "lint-staged": {
+    "*.{md,json,yaml,yml}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --ext .js,.ts"
+    ]
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=7.0.0"
+  },
+  "release": {
+    "branches": [
+      "saga",
+      {
+        "name": "!(saga)",
+        "prerelease": true
+      }
+    ],
+    "remoteTags": true
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "package-lock.json",
+    "dist",
+    "cli/index.js",
+    "LICENSE",
+    "README.md"
+  ],
+  "jest": {
+    "testURL": "http://localhost",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "transform": {
+      ".+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": ".+\\.spec\\.ts$",
+    "globals": {
+      "ts-jest": {
+        "diagnostics": true
+      }
+    }
+  }
+}
