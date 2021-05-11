@@ -86,6 +86,7 @@
   "files": [
     "package-lock.json",
     "dist",
+    "data",
     "cli/index.js",
     "LICENSE",
     "README.md"
