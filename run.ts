@@ -6,6 +6,7 @@ import {
 	log,
 	runCmd,
 	atHostHexfile,
+	anySeen,
 } from '@nordicsemiconductor/firmware-ci-device-helpers'
 import { promises as fs } from 'fs'
 import * as path from 'path'
@@ -186,14 +187,18 @@ export const run = ({
 						...log({ prefixes: ['Flash Firmware'] }),
 					})
 
-					const terminateOn = (type: 'abortOn' | 'endOn', s: string[]) => {
+					const terminateOn = (
+						type: 'abortOn' | 'endOn',
+						s: string[],
+						t: (s: string[]) => (s: string) => boolean,
+					) => {
 						progress(
 							deviceId,
 							`<${type}>`,
 							`Setting up ${type} traps. Job will terminate if output contains:`,
 						)
 						s?.map((s) => progress(device, `<${type}>`, s))
-						const terminateCheck = allSeen(s)
+						const terminateCheck = t(s)
 						onData(async (data) => {
 							s?.forEach(async (s) => {
 								if (data.includes(s)) {
@@ -226,8 +231,8 @@ export const run = ({
 						})
 					}
 
-					if (abortOn !== undefined) terminateOn('abortOn', abortOn)
-					if (endOn !== undefined) terminateOn('endOn', endOn)
+					if (abortOn !== undefined) terminateOn('abortOn', abortOn, anySeen)
+					if (endOn !== undefined) terminateOn('endOn', endOn, allSeen)
 				})
 				.catch(reject)
 		})
