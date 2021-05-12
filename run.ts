@@ -123,7 +123,7 @@ export const run = ({
 			connect({
 				device,
 				atHostHexfile: atHost,
-				...log({ prefixes: ['Connection'] }),
+				...log(),
 			})
 				.then(async ({ connection, deviceLog, onData, onEnd }) => {
 					let flashLog: string[] = []
