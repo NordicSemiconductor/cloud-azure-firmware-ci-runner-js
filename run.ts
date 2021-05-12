@@ -221,7 +221,7 @@ export const run = ({
 									await connection.end()
 									resolve({
 										connected: true,
-										abort: false,
+										abort: type === 'abortOn',
 										timeout: false,
 										deviceLog,
 										flashLog,
