@@ -3,12 +3,9 @@ import {
 	connect,
 	flashCredentials,
 	allSeen,
-	progress,
-	warn,
 	log,
 	runCmd,
 	atHostHexfile,
-	debug,
 } from '@nordicsemiconductor/firmware-ci-device-helpers'
 import { promises as fs } from 'fs'
 import * as path from 'path'
@@ -56,6 +53,7 @@ export const run = ({
 	device: string
 	target: 'thingy91_nrf9160ns' | 'nrf9160dk_nrf9160ns'
 }): ((args: Args) => Result) => {
+	const { debug, progress, warn } = log()
 	debug('device', device)
 	debug('target', target)
 	return async ({
@@ -125,7 +123,7 @@ export const run = ({
 			connect({
 				device,
 				atHostHexfile: atHost,
-				...log(),
+				...log({ prefixes: ['Connection'] }),
 			})
 				.then(async ({ connection, deviceLog, onData, onEnd }) => {
 					let flashLog: string[] = []
@@ -165,7 +163,7 @@ export const run = ({
 						}
 						await flash({
 							hexfile: atHost,
-							...log('Resetting device with AT Host'),
+							...log({ prefixes: ['Resetting device with AT Host'] }),
 						})
 					})
 					progress(device, 'Flashing credentials')
@@ -185,7 +183,7 @@ export const run = ({
 					})
 					flashLog = await flash({
 						hexfile: hexFile,
-						...log('Flash Firmware'),
+						...log({ prefixes: ['Flash Firmware'] }),
 					})
 
 					const terminateOn = (type: 'abortOn' | 'endOn', s: string[]) => {
