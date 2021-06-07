@@ -32,7 +32,7 @@
     "@serialport/parser-readline": "9.0.7",
     "form-data": "4.0.0",
     "node-fetch": "2.6.1",
-    "serialport": "9.0.7",
+    "serialport": "9.1.0",
     "shell-quote": "*",
     "uuid": "8.3.2"
   },
