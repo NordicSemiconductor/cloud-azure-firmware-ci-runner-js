@@ -10,6 +10,7 @@ import {
 } from '@nordicsemiconductor/firmware-ci-device-helpers'
 import { promises as fs } from 'fs'
 import * as path from 'path'
+import { exec } from './exec'
 
 type Result = Promise<{
 	connected: boolean
@@ -54,7 +55,7 @@ export const run = ({
 	device: string
 	target: 'thingy91_nrf9160ns' | 'nrf9160dk_nrf9160ns'
 }): ((args: Args) => Result) => {
-	const { debug, progress, warn } = log()
+	const { debug, progress, warn, error } = log()
 	debug('device', device)
 	debug('target', target)
 	return async ({
@@ -111,6 +112,13 @@ export const run = ({
 				setTimeout(resolve, powerCycle.waitSecondsAfterOn * 1000),
 			)
 		}
+
+		// nrfjprog --eraseall
+		await exec({
+			cmdWithArgs: ['nrfjprog', '--eraseall'],
+			log: (...args) => progress('eraseall', ...args),
+			error: (...args) => error('eraseall', ...args),
+		})
 
 		const res = await new Promise<{
 			connected: boolean
