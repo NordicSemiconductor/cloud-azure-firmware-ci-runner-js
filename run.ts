@@ -10,7 +10,6 @@ import {
 } from '@nordicsemiconductor/firmware-ci-device-helpers'
 import { promises as fs } from 'fs'
 import * as path from 'path'
-import { exec } from './exec'
 
 type Result = Promise<{
 	connected: boolean
@@ -114,10 +113,9 @@ export const run = ({
 		}
 
 		// nrfjprog --eraseall
-		await exec({
-			cmdWithArgs: ['nrfjprog', '--eraseall'],
-			log: (...args) => progress('eraseall', ...args),
-			error: (...args) => error('eraseall', ...args),
+		await runCmd({
+			cmd: 'nrfjprog --eraseall',
+			...log({ prefixes: ['eraseall'] }),
 		})
 
 		const res = await new Promise<{
