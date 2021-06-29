@@ -28,8 +28,12 @@
   },
   "homepage": "https://github.com/NordicSemiconductor/cloud-azure-firmware-ci-runner-js#readme",
   "dependencies": {
+    "@azure/arm-iothub": "^5.0.0",
+    "@azure/ms-rest-nodeauth": "^3.0.10",
+    "@azure/storage-blob": "^12.6.0",
     "@nordicsemiconductor/firmware-ci-device-helpers": "9.0.16",
     "@serialport/parser-readline": "9.0.7",
+    "azure-iothub": "^1.14.2",
     "form-data": "4.0.0",
     "node-fetch": "2.6.1",
     "serialport": "9.2.0",
