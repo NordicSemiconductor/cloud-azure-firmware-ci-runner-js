@@ -43,7 +43,7 @@
     "@nordicsemiconductor/eslint-config-asset-tracker-cloud-typescript": "8.0.3",
     "@types/jest": "26.0.24",
     "@types/node": "15.0.2",
-    "@types/node-fetch": "2.5.11",
+    "@types/node-fetch": "2.5.12",
     "@types/serialport": "8.0.2",
     "@types/shell-quote": "*",
     "@types/uuid": "8.3.1",
