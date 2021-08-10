@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/NordicSemiconductor/cloud-azure-firmware-ci-runner-js#readme",
   "dependencies": {
-    "@nordicsemiconductor/firmware-ci-device-helpers": "9.0.60",
+    "@nordicsemiconductor/firmware-ci-device-helpers": "9.0.61",
     "@serialport/parser-readline": "9.0.7",
     "form-data": "4.0.0",
     "node-fetch": "2.6.1",
