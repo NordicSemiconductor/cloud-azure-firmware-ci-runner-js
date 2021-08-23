@@ -1,7 +1,6 @@
 import {
 	flash,
 	connect,
-	flashCredentials,
 	allSeen,
 	log,
 	runCmd,
@@ -176,20 +175,40 @@ export const run = ({
 						})
 					})
 					progress(device, 'Flashing credentials')
-					await flashCredentials({
-						...credentials,
-						...connection,
-						secTag,
-						caCert: await fs.readFile(
-							path.resolve(
-								__dirname,
-								'..',
-								'data',
-								'BaltimoreCyberTrustRoot.pem',
-							),
-							'utf-8',
-						),
-					})
+					progress('Provisioning credentials')
+					// Turn off modem
+					await connection.at('AT+CFUN=4')
+					// 0 – Root CA certificate (ASCII text)
+					await connection.at(
+						`AT%CMNG=0,${secTag},0,"${(
+							await fs.readFile(
+								path.resolve(
+									__dirname,
+									'..',
+									'data',
+									'BaltimoreCyberTrustRoot.pem',
+								),
+								'utf-8',
+							)
+						).replace(/\n/g, '\r\n')}"`,
+					)
+					// 1 – Client certificate (ASCII text)
+					await connection.at(
+						`AT%CMNG=0,${secTag},1,"${credentials.clientCert.replace(
+							/\n/g,
+							'\r\n',
+						)}"`,
+					)
+					// 2 – Client private key (ASCII text)
+					await connection.at(
+						`AT%CMNG=0,${secTag},2,"${credentials.privateKey.replace(
+							/\n/g,
+							'\r\n',
+						)}"`,
+					)
+					// Turn on modem
+					await connection.at('AT+CFUN=1')
+
 					flashLog = await flash({
 						hexfile: hexFile,
 						...log({ prefixes: ['Flash Firmware'] }),
