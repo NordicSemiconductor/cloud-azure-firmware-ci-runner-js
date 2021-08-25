@@ -15,7 +15,7 @@ process.on('unhandledRejection', die)
 const { run } = require('../dist/run')
 run({
 	target: process.env.RUN_TARGET ?? 'nrf9160dk_nrf9160ns',
-	device: process.env.RUN_DEVICE ?? '/dev/ttyACM0',
+	port: process.env.RUN_PORT ?? '/dev/ttyACM0',
 })(JSON.parse(fs.readFileSync(0, 'utf-8')))
 	.then((res) => {
 		if (res.timeout) {

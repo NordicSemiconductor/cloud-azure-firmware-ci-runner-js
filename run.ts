@@ -18,9 +18,6 @@ import { BlobServiceClient } from '@azure/storage-blob'
 import { URL } from 'url'
 import { v4 } from 'uuid'
 
-const defaultPort = '/dev/ttyACM0'
-const defaultSecTag = 11
-
 type Result = Promise<{
 	connected: boolean
 	timeout: boolean
@@ -86,7 +83,7 @@ export const run = ({
 	}: Args): Result => {
 		debug('appVersion', appVersion)
 		debug('network', network)
-		debug('secTag', secTag ?? defaultSecTag)
+		debug('secTag', secTag)
 		debug('timeoutInMinutes', timeoutInMinutes)
 		debug('hexFile', hexFile)
 		debug('fotaFile', fotaFile)
@@ -229,7 +226,7 @@ export const run = ({
 							progress(`Firmware version:`, mfwv)
 							const v = mfwv.split('_')[2]
 							if (semver.satisfies(v, '>=1.3.0')) {
-								progress(`Resetting modem settings`, port ?? defaultPort)
+								progress(`Resetting modem settings`, port)
 								await connection.at('AT%XFACTORYRESET=0')
 							} else {
 								warn(`Please update your modem firmware!`)
