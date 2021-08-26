@@ -11,7 +11,6 @@ import {
 import { Registry } from 'azure-iothub'
 import { promises as fs } from 'fs'
 import * as path from 'path'
-import { deviceHasConnected } from './deviceHasConnected'
 import { exec } from './exec'
 import * as semver from 'semver'
 import { BlobServiceClient } from '@azure/storage-blob'
@@ -61,7 +60,7 @@ export const run = ({
 	port: string
 	target: 'thingy91_nrf9160ns' | 'nrf9160dk_nrf9160ns'
 }): ((args: Args) => Result) => {
-	const { debug, progress, warn, error } = log()
+	const { debug, progress, warn, error, success } = log()
 	debug('port', port)
 	debug('target', target)
 	return async ({
@@ -322,12 +321,14 @@ export const run = ({
 
 						// Schedule Firmware update, if device has connected
 						const tryScheduleFota = async () => {
-							if (
-								await deviceHasConnected({
-									deviceId,
-									iotHubRegistry,
-								})
-							) {
+							progress(deviceId, 'checking if device has connected')
+							const res = await iotHubRegistry
+								.createQuery(
+									`SELECT * FROM devices WHERE deviceId='${deviceId}'`,
+								)
+								.nextAsTwin()
+							if (res.result.length > 0) {
+								success(deviceId, 'device has connected')
 								connected = true
 
 								// Upload FOTA file
@@ -340,22 +341,28 @@ export const run = ({
 										blobCacheControl: 'public, max-age=31536000',
 									},
 								})
-								const url = `https://${fotaStorageAccountName}.blob.core.windows.net/${fotaStorageContainer}/${fotaFileName}`
+								const url = new URL(
+									`https://${fotaStorageAccountName}.blob.core.windows.net/${fotaStorageContainer}/${fotaFileName}`,
+								)
 
 								// Schedule
-								const devices = iotHubRegistry.createQuery(
-									`SELECT * FROM devices WHERE deviceId='${deviceId}'`,
-								)
-								const res = await devices.nextAsTwin()
+								const res = await iotHubRegistry
+									.createQuery(
+										`SELECT * FROM devices WHERE deviceId='${deviceId}'`,
+									)
+									.nextAsTwin()
 								await iotHubRegistry.updateTwin(
 									deviceId,
 									{
 										properties: {
 											desired: {
 												firmware: {
-													fwVersion: appVersion,
-													...new URL(url),
-													path: new URL(url).pathname.substr(1), // remove leading slash
+													fwVersion: `${appVersion}-upgraded`,
+													fwLocation: {
+														protocol: url.protocol,
+														host: url.hostname,
+														path: url.pathname.substr(1), // remove leading slash
+													},
 													// See https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/include/net/azure_fota.html
 													fwFragmentSize: 1800,
 													jobId: v4(),
@@ -365,12 +372,15 @@ export const run = ({
 									},
 									res.result[0].etag,
 								)
+								progress(deviceId, `fota scheduled`)
 								// Done, do not reschedule
 								return
 							}
 							// Reschedule
+							progress(deviceId, 'has not yet connected, rescheduling FOTA')
 							schedulaFotaTimeout = setTimeout(tryScheduleFota, 60 * 1000)
 						}
+						progress(deviceId, 'Scheduling FOTA')
 						schedulaFotaTimeout = setTimeout(tryScheduleFota, 60 * 1000)
 					})
 					.catch(reject)
