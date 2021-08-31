@@ -7,13 +7,14 @@ import {
 	runCmd,
 	atHostHexfile,
 	anySeen,
+	Connection,
 } from '@nordicsemiconductor/firmware-ci-device-helpers'
 import { Registry } from 'azure-iothub'
 import { promises as fs } from 'fs'
 import * as path from 'path'
 import { exec } from './exec'
 import * as semver from 'semver'
-import { BlobServiceClient } from '@azure/storage-blob'
+import { BlobServiceClient, BlockBlobUploadResponse } from '@azure/storage-blob'
 import { URL } from 'url'
 import { v4 } from 'uuid'
 
@@ -156,8 +157,7 @@ export const run = ({
 			error: (...args) => error('eraseall', ...args),
 		})
 
-		let flashLog: string[] = []
-		let connected = false
+		let uploadResult: BlockBlobUploadResponse | undefined
 
 		try {
 			const res = await new Promise<{
@@ -167,29 +167,41 @@ export const run = ({
 				deviceLog: string[]
 				flashLog: string[]
 			}>((resolve, reject) => {
+				let flashLog: string[] = []
 				let done = false
+				let connection: Connection
 				let schedulaFotaTimeout: NodeJS.Timeout
+				let deviceLog: string[]
+				let connected = false
+
+				progress(port, `Setting timeout to ${timeoutInMinutes} minutes`)
+				const jobTimeout = setTimeout(async () => {
+					done = true
+					warn(deviceId, 'Timeout reached.')
+					await connection?.end()
+					if (schedulaFotaTimeout !== undefined)
+						clearTimeout(schedulaFotaTimeout)
+					resolve({
+						connected,
+						timeout: true,
+						abort: false,
+						deviceLog,
+						flashLog,
+					})
+				}, timeoutInMinutes * 60 * 1000)
+
 				progress(port, `Connecting...`)
 				connect({
 					device: port,
 					atHostHexfile: atHost,
 					...log(),
-				})
-					.then(async ({ connection, deviceLog, onData, onEnd }) => {
-						const credentials = JSON.parse(
-							await fs.readFile(
-								path.resolve(certDir, `device-${deviceId}.json`),
-								'utf-8',
-							),
-						)
-
-						progress(port, `Setting timeout to ${timeoutInMinutes} minutes`)
-						const jobTimeout = setTimeout(async () => {
+					onEnd: async (_, timeout) => {
+						if (timeout) {
 							done = true
-							warn(deviceId, 'Timeout reached.')
-							await connection.end()
+							clearTimeout(jobTimeout)
 							if (schedulaFotaTimeout !== undefined)
 								clearTimeout(schedulaFotaTimeout)
+							warn(deviceId, 'Device read timeout occurred.')
 							resolve({
 								connected,
 								timeout: true,
@@ -197,28 +209,22 @@ export const run = ({
 								deviceLog,
 								flashLog,
 							})
-						}, timeoutInMinutes * 60 * 1000)
-
-						onEnd(async (_, timeout) => {
-							if (timeout) {
-								done = true
-								clearTimeout(jobTimeout)
-								if (schedulaFotaTimeout !== undefined)
-									clearTimeout(schedulaFotaTimeout)
-								warn(deviceId, 'Device read timeout occurred.')
-								resolve({
-									connected,
-									timeout: true,
-									abort: false,
-									deviceLog,
-									flashLog,
-								})
-							}
-							await flash({
-								hexfile: atHost,
-								...log({ prefixes: ['Resetting device with AT Host'] }),
-							})
+						}
+						await flash({
+							hexfile: atHost,
+							...log({ prefixes: ['Resetting device with AT Host'] }),
 						})
+					},
+				})
+					.then(async ({ connection: c, deviceLog: d, onData }) => {
+						connection = c
+						deviceLog = d
+						const credentials = JSON.parse(
+							await fs.readFile(
+								path.resolve(certDir, `device-${deviceId}.json`),
+								'utf-8',
+							),
+						)
 
 						const mfwv = (await connection.at('AT+CGMR'))[0]
 						if (mfwv !== undefined) {
@@ -335,7 +341,7 @@ export const run = ({
 								const blockBlobClient =
 									containerClient.getBlockBlobClient(fotaFileName)
 								const file = await fs.readFile(fotaFile)
-								await blockBlobClient.upload(file, file.length, {
+								uploadResult = await blockBlobClient.upload(file, file.length, {
 									blobHTTPHeaders: {
 										blobContentType: 'text/octet-stream',
 										blobCacheControl: 'public, max-age=31536000',
@@ -387,7 +393,7 @@ export const run = ({
 			})
 
 			// Delete FOTA file
-			if (connected) {
+			if (uploadResult !== undefined) {
 				await containerClient.deleteBlob(fotaFileName)
 			}
 
