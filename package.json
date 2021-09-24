@@ -30,7 +30,7 @@
   "dependencies": {
     "@azure/identity": "1.5.2",
     "@azure/storage-blob": "12.8.0",
-    "@nordicsemiconductor/firmware-ci-device-helpers": "11.0.1",
+    "@nordicsemiconductor/firmware-ci-device-helpers": "11.0.2",
     "@serialport/parser-readline": "9.0.7",
     "azure-iothub": "1.14.4",
     "semver": "7.3.5",
