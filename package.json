@@ -34,7 +34,7 @@
     "@serialport/parser-readline": "9.2.4",
     "azure-iothub": "1.14.4",
     "semver": "7.3.5",
-    "serialport": "9.2.3",
+    "serialport": "9.2.4",
     "uuid": "8.3.2"
   },
   "devDependencies": {
