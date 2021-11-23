@@ -42,6 +42,7 @@ type Args = {
 		location: string
 		resourceGroup: string
 		appName: string
+		storageAccountName: string
 	}
 	certDir: string
 	powerCycle?: {
@@ -122,9 +123,8 @@ export const run = ({
 		)
 
 		const fotaStorageContainer = 'upgrades'
-		const fotaStorageAccountName = `${testEnv.resourceGroup}fota`
 		const blobServiceClient = new BlobServiceClient(
-			`https://${fotaStorageAccountName}.blob.core.windows.net`,
+			`https://${testEnv.storageAccountName}.blob.core.windows.net`,
 			creds,
 		)
 		const containerClient =
@@ -348,7 +348,7 @@ export const run = ({
 									},
 								})
 								const url = new URL(
-									`https://${fotaStorageAccountName}.blob.core.windows.net/${fotaStorageContainer}/${fotaFileName}`,
+									`https://${testEnv.storageAccountName}.blob.core.windows.net/${fotaStorageContainer}/${fotaFileName}`,
 								)
 
 								// Schedule
