@@ -45,7 +45,7 @@
     "@types/serialport": "8.0.2",
     "@types/uuid": "8.3.3",
     "chalk": "5.0.0",
-    "jest": "27.4.2",
+    "jest": "27.4.3",
     "ts-jest": "27.0.7"
   },
   "lint-staged": {
