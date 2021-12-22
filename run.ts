@@ -60,7 +60,7 @@ export const run = ({
 	target,
 }: {
 	port: string
-	target: 'thingy91_nrf9160ns' | 'nrf9160dk_nrf9160ns'
+	target: 'thingy91_nrf9160_ns' | 'nrf9160dk_nrf9160_ns'
 }): ((args: Args) => Result) => {
 	const { debug, progress, warn, error, success } = log()
 	debug('port', port)
@@ -97,7 +97,7 @@ export const run = ({
 		debug('flashLogLocation', flashLogLocation)
 		debug('deviceLogLocation', deviceLogLocation)
 		const atHost =
-			target === 'thingy91_nrf9160ns'
+			target === 'thingy91_nrf9160_ns'
 				? atHostHexfile.thingy91
 				: atHostHexfile['9160dk']
 
