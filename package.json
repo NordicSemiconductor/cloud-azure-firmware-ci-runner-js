@@ -16,10 +16,11 @@
     "url": "git+https://github.com/NordicSemiconductor/cloud-azure-firmware-ci-runner-js.git"
   },
   "keywords": [
-    "Cloud",
-    "IoT",
-    "AssetTracker",
-    "Nordic Semiconductor"
+    "nrf-asset-tracker",
+    "iot",
+    "firmware",
+    "end-to-end-testing",
+    "azure"
   ],
   "author": "Nordic Semiconductor ASA | nordicsemi.no",
   "license": "BSD-3-Clause",
