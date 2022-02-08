@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs')
+const { run } = require('../dist/run')
 
 const die = (err, origin) => {
 	console.error(`An unhandled exception occured!`)
@@ -12,11 +13,11 @@ const die = (err, origin) => {
 process.on('uncaughtException', die)
 process.on('unhandledRejection', die)
 
-const { run } = require('../dist/run')
+const input = JSON.parse(fs.readFileSync(0, 'utf-8'))
 run({
 	target: process.env.RUN_TARGET ?? 'nrf9160dk_nrf9160_ns',
 	port: process.env.RUN_PORT ?? '/dev/ttyACM0',
-})(JSON.parse(fs.readFileSync(0, 'utf-8')))
+})(input)
 	.then((res) => {
 		if (res.timeout) {
 			console.error(`Timed out.`)

@@ -22,8 +22,8 @@ type Result = Promise<{
 	connected: boolean
 	timeout: boolean
 	abort: boolean
-	deviceLog: string[]
-	flashLog: string[]
+	deviceLog?: string[]
+	flashLog?: string[]
 }>
 
 type Args = {
@@ -164,8 +164,8 @@ export const run = ({
 				connected: boolean
 				timeout: boolean
 				abort: boolean
-				deviceLog: string[]
-				flashLog: string[]
+				deviceLog?: string[]
+				flashLog?: string[]
 			}>((resolve, reject) => {
 				let flashLog: string[] = []
 				let done = false
@@ -398,8 +398,12 @@ export const run = ({
 			}
 
 			await Promise.all([
-				fs.writeFile(flashLogLocation, res.flashLog.join('\n'), 'utf-8'),
-				fs.writeFile(deviceLogLocation, res.deviceLog.join('\n'), 'utf-8'),
+				fs.writeFile(flashLogLocation, res.flashLog?.join('\n') ?? '', 'utf-8'),
+				fs.writeFile(
+					deviceLogLocation,
+					res.deviceLog?.join('\n') ?? '',
+					'utf-8',
+				),
 			])
 
 			return res
