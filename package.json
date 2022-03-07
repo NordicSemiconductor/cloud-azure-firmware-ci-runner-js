@@ -40,13 +40,13 @@
   },
   "devDependencies": {
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "11.0.34",
-    "@types/jest": "27.0.3",
+    "@types/jest": "27.4.1",
     "@types/node": "16.11.13",
     "@types/semver": "7.3.9",
     "@types/serialport": "8.0.2",
     "@types/uuid": "8.3.3",
     "chalk": "5.0.0",
-    "jest": "27.4.5",
+    "jest": "27.5.1",
     "ts-jest": "27.1.1"
   },
   "lint-staged": {
