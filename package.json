@@ -34,7 +34,7 @@
     "@nordicsemiconductor/firmware-ci-device-helpers": "13.0.91",
     "@serialport/parser-readline": "10.3.0",
     "azure-iothub": "1.14.6",
-    "semver": "7.3.5",
+    "semver": "7.3.6",
     "serialport": "10.4.0",
     "uuid": "8.3.2"
   },
