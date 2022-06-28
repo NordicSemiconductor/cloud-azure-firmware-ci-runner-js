@@ -1,22 +1,22 @@
 import { ClientSecretCredential } from '@azure/identity'
+import { BlobServiceClient, BlockBlobUploadResponse } from '@azure/storage-blob'
 import {
-	flash,
-	connect,
 	allSeen,
+	anySeen,
+	atHostHexfile,
+	connect,
+	Connection,
+	flash,
 	log,
 	runCmd,
-	atHostHexfile,
-	anySeen,
-	Connection,
 } from '@nordicsemiconductor/firmware-ci-device-helpers'
 import { Registry } from 'azure-iothub'
 import { promises as fs } from 'fs'
 import * as path from 'path'
-import { exec } from './exec'
 import * as semver from 'semver'
-import { BlobServiceClient, BlockBlobUploadResponse } from '@azure/storage-blob'
 import { URL } from 'url'
 import { v4 } from 'uuid'
+import { exec } from './exec'
 
 type Result = Promise<{
 	connected: boolean
@@ -129,7 +129,7 @@ export const run = ({
 		)
 		const containerClient =
 			blobServiceClient.getContainerClient(fotaStorageContainer)
-		const fotaFileName = `${deviceId.substr(0, 8)}.bin`
+		const fotaFileName = `${deviceId.slice(0, 8)}.bin`
 
 		if (powerCycle !== undefined) {
 			progress(port, `Power cycling device`)
@@ -367,7 +367,7 @@ export const run = ({
 													fwLocation: {
 														protocol: url.protocol,
 														host: url.hostname,
-														path: url.pathname.substr(1), // remove leading slash
+														path: url.pathname.slice(1), // remove leading slash
 													},
 													// See https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/include/net/azure_fota.html
 													fwFragmentSize: 1800,
