@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "11.0.100",
-    "@swc/jest": "0.2.21",
+    "@swc/jest": "0.2.22",
     "@types/jest": "28.1.6",
     "@types/node": "16.11.45",
     "@types/semver": "7.3.10",
