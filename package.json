@@ -42,7 +42,7 @@
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "11.0.103",
     "@swc/jest": "0.2.22",
     "@types/jest": "28.1.6",
-    "@types/node": "16.11.45",
+    "@types/node": "16.11.46",
     "@types/semver": "7.3.10",
     "@types/serialport": "8.0.2",
     "@types/uuid": "8.3.4",
