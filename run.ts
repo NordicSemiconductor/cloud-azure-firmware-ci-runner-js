@@ -1,4 +1,4 @@
-import { ClientSecretCredential } from '@azure/identity'
+import { AzureCliCredential } from '@azure/identity'
 import { BlobServiceClient, BlockBlobUploadResponse } from '@azure/storage-blob'
 import {
 	allSeen,
@@ -38,9 +38,6 @@ type Args = {
 	endOn?: string[]
 	endOnWaitSeconds?: number
 	testEnv: {
-		credentials: string
-		location: string
-		resourceGroup: string
 		appName: string
 		storageAccountName: string
 	}
@@ -101,24 +98,10 @@ export const run = ({
 				? atHostHexfile.thingy91
 				: atHostHexfile['9160dk']
 
-		const { clientId, clientSecret, tenantId } = JSON.parse(
-			testEnv.credentials,
-		) as {
-			clientId: string
-			clientSecret: string
-			subscriptionId: string
-			tenantId: string
-			activeDirectoryEndpointUrl: string
-			resourceManagerEndpointUrl: string
-			activeDirectoryGraphResourceId: string
-			sqlManagementEndpointUrl: string
-			galleryEndpointUrl: string
-			managementEndpointUrl: string
-		}
-		const creds = new ClientSecretCredential(tenantId, clientId, clientSecret)
+		const creds = new AzureCliCredential()
 
 		const iotHubRegistry = Registry.fromTokenCredential(
-			`${testEnv.resourceGroup}IotHub.azure-devices.net`,
+			`${testEnv.appName}IotHub.azure-devices.net`,
 			creds,
 		)
 
