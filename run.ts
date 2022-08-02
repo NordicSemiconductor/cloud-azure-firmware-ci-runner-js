@@ -1,3 +1,4 @@
+import { SubscriptionClient } from '@azure/arm-resources-subscriptions'
 import { AzureCliCredential } from '@azure/identity'
 import { BlobServiceClient, BlockBlobUploadResponse } from '@azure/storage-blob'
 import {
@@ -104,6 +105,12 @@ export const run = ({
 			`${testEnv.appName}IotHub.azure-devices.net`,
 			creds,
 		)
+
+		progress(`Listing subscriptions ...`)
+		const subscriptionClient = new SubscriptionClient(creds)
+		for await (const subscription of subscriptionClient.subscriptions.list()) {
+			debug('subscription', subscription.subscriptionId)
+		}
 
 		const fotaStorageContainer = 'upgrades'
 		const blobServiceClient = new BlobServiceClient(
