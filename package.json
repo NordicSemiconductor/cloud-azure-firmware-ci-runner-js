@@ -7,9 +7,7 @@
   "scripts": {
     "test": "jest",
     "start": "node --unhandled-rejections=strict dist/runner/runner.js",
-    "postinstall": "husky install",
-    "prepublishOnly": "pinst --disable",
-    "postpublish": "pinst --enable"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
