@@ -42,7 +42,7 @@
     "@swc/jest": "0.2.23",
     "@types/jest": "29.2.0",
     "@types/node": "18.11.7",
-    "@types/semver": "7.3.12",
+    "@types/semver": "7.3.13",
     "@types/serialport": "8.0.2",
     "@types/uuid": "8.3.4",
     "chalk": "5.1.2",
