@@ -40,7 +40,7 @@
   "devDependencies": {
     "@nordicsemiconductor/asset-tracker-cloud-code-style": "11.0.140",
     "@swc/jest": "0.2.23",
-    "@types/jest": "29.2.2",
+    "@types/jest": "29.2.3",
     "@types/node": "18.11.9",
     "@types/semver": "7.3.13",
     "@types/serialport": "8.0.2",
