@@ -330,9 +330,14 @@ export const run = ({
 										blobCacheControl: 'public, max-age=31536000',
 									},
 								})
+
 								const url = new URL(
 									`https://${testEnv.storageAccountName}.blob.core.windows.net/${fotaStorageContainer}/${fotaFileName}`,
 								)
+
+								debug(`File uploaded`, fotaFileName)
+								debug(JSON.stringify(uploadResult))
+								debug(url.toString())
 
 								// Schedule
 								const res = await iotHubRegistry
