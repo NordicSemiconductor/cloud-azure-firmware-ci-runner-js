@@ -12,10 +12,10 @@ import {
 } from '@nordicsemiconductor/firmware-ci-device-helpers'
 import { Registry } from 'azure-iothub'
 import { promises as fs } from 'fs'
+import { randomUUID } from 'node:crypto'
 import * as path from 'path'
 import * as semver from 'semver'
 import { URL } from 'url'
-import { v4 } from 'uuid'
 import { exec } from './exec'
 
 type Result = Promise<{
@@ -359,7 +359,7 @@ export const run = ({
 													},
 													// See https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/include/net/azure_fota.html
 													fwFragmentSize: 1800,
-													jobId: v4(),
+													jobId: randomUUID(),
 												},
 											},
 										},
