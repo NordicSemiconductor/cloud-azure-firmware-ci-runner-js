@@ -353,7 +353,7 @@ export const run = ({
 												firmware: {
 													fwVersion: `${appVersion}-upgraded`,
 													fwLocation: {
-														protocol: url.protocol,
+														protocol: 'http:', // url.protocol,
 														host: url.hostname,
 														path: url.pathname.slice(1), // remove leading slash
 													},
