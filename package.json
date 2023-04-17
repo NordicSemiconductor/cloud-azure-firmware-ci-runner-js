@@ -30,7 +30,7 @@
     "@azure/arm-resources-subscriptions": "2.0.2",
     "@azure/identity": "3.1.4",
     "@azure/storage-blob": "12.14.0",
-    "@nordicsemiconductor/firmware-ci-device-helpers": "14.0.42",
+    "@nordicsemiconductor/firmware-ci-device-helpers": "14.0.43",
     "@serialport/parser-readline": "10.5.0",
     "azure-iothub": "1.16.1",
     "semver": "7.5.0",
