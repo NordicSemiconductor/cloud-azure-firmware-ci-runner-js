@@ -1,11 +1,11 @@
 import { AzureCliCredential } from '@azure/identity'
 import { BlobServiceClient, BlockBlobUploadResponse } from '@azure/storage-blob'
 import {
+	Connection,
 	allSeen,
 	anySeen,
 	atHostHexfile,
 	connect,
-	Connection,
 	flash,
 	log,
 	runCmd,
