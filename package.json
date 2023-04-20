@@ -32,7 +32,7 @@
     "@azure/storage-blob": "12.14.0",
     "@nordicsemiconductor/firmware-ci-device-helpers": "14.0.46",
     "@serialport/parser-readline": "10.5.0",
-    "azure-iothub": "1.16.1",
+    "azure-iothub": "1.16.2",
     "semver": "7.5.0",
     "serialport": "10.5.0"
   },
