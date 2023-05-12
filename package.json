@@ -33,7 +33,7 @@
     "@nordicsemiconductor/firmware-ci-device-helpers": "14.0.70",
     "@serialport/parser-readline": "11.0.0",
     "azure-iothub": "1.16.2",
-    "semver": "7.5.0",
+    "semver": "7.5.1",
     "serialport": "11.0.0"
   },
   "devDependencies": {
