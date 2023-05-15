@@ -28,7 +28,7 @@
   "homepage": "https://github.com/NordicSemiconductor/cloud-azure-firmware-ci-runner-js#readme",
   "dependencies": {
     "@azure/arm-resources-subscriptions": "2.0.2",
-    "@azure/identity": "3.2.1",
+    "@azure/identity": "3.2.2",
     "@azure/storage-blob": "12.14.0",
     "@nordicsemiconductor/firmware-ci-device-helpers": "14.0.74",
     "@serialport/parser-readline": "11.0.0",
