@@ -37,7 +37,7 @@
     "serialport": "11.0.1"
   },
   "devDependencies": {
-    "@nordicsemiconductor/asset-tracker-cloud-code-style": "12.0.81",
+    "@nordicsemiconductor/asset-tracker-cloud-code-style": "12.0.82",
     "@swc/jest": "0.2.29",
     "@types/jest": "29.5.4",
     "@types/node": "18.17.12",
