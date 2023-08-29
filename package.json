@@ -31,7 +31,7 @@
     "@azure/identity": "3.3.0",
     "@azure/storage-blob": "12.15.0",
     "@nordicsemiconductor/firmware-ci-device-helpers": "14.0.184",
-    "@serialport/parser-readline": "11.0.1",
+    "@serialport/parser-readline": "12.0.0",
     "azure-iothub": "1.16.4",
     "semver": "7.5.4",
     "serialport": "11.0.1"
